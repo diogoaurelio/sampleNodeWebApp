@@ -19,12 +19,26 @@ html
                     a.navbar-brand(href='/') Express Website
                 #navbar.collapse.navbar-collapse
                     ul.nav.navbar-nav.navbar-right
-                        li(class=(title === 'Home' ? 'active' : ''))
+                        li(class=(title === 'Data Science Casts Home' ? 'active' : ''))
                             a(href='/') Home
                         li(class=(title === 'About' ? 'active' : ''))
                             a(href='/about') About Us
-                        li(class=(title === 'Contact' ? 'active' : ''))
+                        li(class=(title === 'Contacts' ? 'active' : ''))
                             a(href='/contact') Contact
+                        li(class=(title == 'Register' || title == 'Login' ? 'active dropdown' : 'dropdown'))
+                            a(href='#' class='dropdown-toggle', data-toggle='dropdown', role='button',  aria-expanded='false' ) 
+                                | Sign up / in 
+                                span(class='caret')
+                            ul(class='dropdown-menu')
+                                li(class=(title == 'Register' ? 'active' : '')) 
+                                    a(href='/users/register') Sign Up
+                                li(class='divider')
+                                li(class=(title == 'Login' ? 'active': '')) 
+                                    a(href='/users/login') Log in
+                                li(class='divider')
+                                li
+                                    a(href='/users/logout') Logout
+
     block content
     footer
         p &copy; 2015, All Rights Reserved
