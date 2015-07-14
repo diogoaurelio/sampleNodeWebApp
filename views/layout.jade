@@ -25,19 +25,34 @@ html
                             a(href='/about') About Us
                         li(class=(title === 'Contacts' ? 'active' : ''))
                             a(href='/contact') Contact
+                        if user
+                          li(class=(title == 'Members' ? 'active' : ''))
+                            a(href='/') Members
                         li(class=(title == 'Register' || title == 'Login' ? 'active dropdown' : 'dropdown'))
-                            a(href='#' class='dropdown-toggle', data-toggle='dropdown', role='button',  aria-expanded='false' ) 
-                                | Sign up / in 
-                                span(class='caret')
+                            if !user
+                              a(href='#' class='dropdown-toggle', data-toggle='dropdown', role='button',  aria-expanded='false' )
+                                  | Sign up / in
+                                  span(class='caret')
+                            else
+                              a(href='#' class='dropdown-toggle', data-toggle='dropdown', role='button',  aria-expanded='false' )
+                                  | Logout
+                                  span(class='caret')
+
                             ul(class='dropdown-menu')
-                                li(class=(title == 'Register' ? 'active' : '')) 
-                                    a(href='/users/register') Sign Up
-                                li(class='divider')
-                                li(class=(title == 'Login' ? 'active': '')) 
-                                    a(href='/users/login') Log in
-                                li(class='divider')
-                                li
-                                    a(href='/users/logout') Logout
+                                if !user
+                                  li(class=(title == 'Register' ? 'active' : ''))
+                                      a(href='/users/register') Sign Up
+                                  li(class='divider')
+                                  li(class=(title == 'Login' ? 'active': ''))
+                                      a(href='/users/login') Log in
+
+                                if user
+                                  li
+                                      a(href='/users/logout') Logout
+
+
+    .container
+      != messages()
 
     block content
     footer

@@ -25,11 +25,11 @@ router.get('/login', function(req, res, next) {
 
 router.post('/register',function(req, res, next){
 	// Get Form Values
-	var name = req.body.name;
+	var fname = req.body.fname;
+  var lname = req.body.lname;
 	var email = req.body.email;
-	var username = req.body.username;
 	var password = req.body.password;
-	var password2 = req.body.password2;
+	var confirmpassword = req.body.confirmpassword;
 
 	// Check for Image Field
 	if(req.files.profileimage){
@@ -48,12 +48,12 @@ router.post('/register',function(req, res, next){
 	}
 
 	// Form Validation
-	req.checkBody('name','Name field is required').notEmpty();
+	req.checkBody('fname','First Name field is required').notEmpty();
+  req.checkBody('lname','Last Name field is required').notEmpty();
 	req.checkBody('email','Email field is required').notEmpty();
 	req.checkBody('email','Email not valid').isEmail();
-	req.checkBody('username','Username field is required').notEmpty();
 	req.checkBody('password','Password field is required').notEmpty();
-	req.checkBody('password2','Passwords do not match').equals(req.body.password);
+	req.checkBody('confirmpassword','Passwords do not match').equals(req.body.password);
 
 	// Check for errors
 	var errors = req.validationErrors();
@@ -61,17 +61,17 @@ router.post('/register',function(req, res, next){
 	if(errors){
 		res.render('register',{
 			errors: errors,
-			name: name,
+			fname: fname,
+      lname: lname,
 			email: email,
-			username: username,
 			password: password,
-			password2: password2
+			confirmpassword: confirmpassword
 		});
 	} else {
 		var newUser = new User({
-			name: name,
-			email: email,
-			username: username,
+      fname: fname,
+      lname: lname,
+      email: email,
 			password: password,
 			profileimage: profileImageName
 		});
@@ -125,12 +125,20 @@ passport.use(new LocalStrategy(
 	}
 ));
 
-router.post('/login', passport.authenticate('local',{ successRedirect: '/', successFlash: 'Successfully logged in', failureRedirect:'/users/login', failureFlash:'Invalid username or password'}), function(req, res){
+router.post('/login', passport.authenticate('local',{ failureRedirect:'/users/login', failureFlash:'Invalid username or password'}), function(req, res){
   // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
   console.log('Authentication Successful');
 	req.flash('success', 'You are logged in');
+  //res.render('/', { messages: req.flash('success')})
 	res.redirect('/');
 });
+
+router.get('/logout', function(req, res) {
+  req.logout();
+  req.flash('Success', 'You have logged out')
+  //res.render('users/login', { messages: req.flash('success')})
+  res.redirect('users/login')
+})
 
 module.exports = router;
